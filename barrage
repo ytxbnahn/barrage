@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .barrage{
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <div class="container"></div>
+    <script>
+        const num = 4;
+        const wH = window.innerHeight;
+        const wW = window.innerWidth;
+        var Barrages = [];
+        init();
+        add();
+        //move();
+        document.body.addEventListener('click',function (e) {
+            if(e.target.className.toLowerCase()==='barrage'){
+                e.target.parentNode.removeChild(e.target)
+                Barrages.splice(Barrages.lastIndexOf(e.target),1)
+            }
+            console.log(e.target.className)
+        },false)
+        function init() {
+            var fragment = document.createDocumentFragment();
+            for(var i=0; i<num; i++){
+                var randomX = Math.floor(Math.random()*wW);
+                var barrage = document.createElement('div');
+                barrage.className = 'barrage';
+                barrage.speed = Math.floor(Math.random()*10);
+                barrage.style.left = Math.max(0,randomX - 100)+'px';
+                barrage.style.top = wH + 'px';
+                fragment.appendChild(barrage);
+                Barrages.push(barrage);
+            }
+            document.querySelector('.container').appendChild(fragment)
+        }
+        function move() {
+            for(var i = 0,len = Barrages.length;i<len;i++){
+                Barrages[i].style.top = Barrages[i].offsetTop -1 - Barrages[i].speed +'px'
+            }
+        }
+        function add() {
+            setTimeout(function () {
+                move()
+                add();
+            },1000/30)
+        }
+    </script>
+</body>
+</html>
